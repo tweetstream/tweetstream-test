@@ -9,5 +9,4 @@ TweetStream.configure do |config|
   config.consumer_secret    = auth[credentials]['consumer_secret']
   config.oauth_token        = auth[credentials]['oauth_token']
   config.oauth_token_secret = auth[credentials]['oauth_token_secret']
-  config.parser   = :yajl
 end
