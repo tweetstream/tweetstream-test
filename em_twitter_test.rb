@@ -13,10 +13,6 @@ EM::run do
     :params => {
       :track            => 'you,Obama,eli,bachelor,Romney'
     },
-    # :ssl => {
-    #   :verify_peer      => true,
-    #   :cert_chain_file  => '/etc/ssl/certs/cacert.pem'
-    # },
     :oauth  => {
       :consumer_key     => auth[credentials]['consumer_key'],
       :consumer_secret  => auth[credentials]['consumer_secret'],
@@ -29,7 +25,7 @@ EM::run do
   client = EM::Twitter::Client.connect(options)
 
   client.each do |item|
-    puts item
+    print '.'
   end
 
   client.on_error do |message|
@@ -64,8 +60,24 @@ EM::run do
     puts "oops: enhance_your_calm"
   end
 
-  EM.add_timer(25) do
-    EM.stop
+  client.on_service_unavailable do
+    puts "oops: service unavailable"
+  end
+
+  client.on_reconnect do
+    puts 'reconnecting'
+  end
+
+  client.on_max_reconnects do
+    puts 'max reconnects reached'
+  end
+
+  client.on_close do
+    puts 'closing'
+  end
+
+  client.on_no_data_received do
+    puts 'no data received'
   end
 
 end
